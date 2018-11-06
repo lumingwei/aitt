@@ -76,8 +76,55 @@ class IndexController extends Controller {
     }
 
     public function index(){
-        echo 'hellow';
-    }   
+        $uid = I('uid','1','intval');
+        $list = M('Sku')->where(['uid'=>$uid])->select();   
+        $this->assign('list',$list); 
+        $this->display();
+    }
+
+    public function del_sku(){
+        $sku_id = I('sku_id','','trim');
+        if(empty($sku_id)){
+            $this->error('参数异常',U('Index/index'));
+        }
+        M('Sku')->where(['sku_id'=>$sku_id])->delete();
+        $this->success('操作成功',U('Index/index'));
+    } 
+
+    public function add_sku(){
+          $this->display();
+    }
+
+    public function add_sku_save(){
+           $extra_msg = '';
+           $sku_ids = I('sku_ids','','trim');
+           if(empty($sku_ids)){
+             $this->error('参数异常',U('Index/index'));
+           }
+           $sku_ids = explode(',', $sku_ids);
+           if(empty($sku_ids)){
+             $this->error('参数异常',U('Index/index'));
+           }
+           $where['sku_id'] = ['IN',$sku_ids];
+           $exists = M('Sku')->where($where)->getField('sku_id',true);
+           $exists = !empty($exists)?$exists:[];
+           $add_skus =  array_diff($sku_ids, $exists);
+           if(!empty($add_skus)){
+              foreach ($add_skus as $value) {
+                  $add_data[] = [
+                     'sku_id'=>$value
+                  ];
+              }
+              M('Sku')->addAll($add_data);
+           }
+           if(!empty($add_skus)){
+              $extra_msg .= ' <br/> 以下sku成功入库:['.implode(',',$add_skus).']';
+           }                
+           if(!empty($exists)){
+              $extra_msg .= ' <br/> 以下sku已经入库，无需重复添加:['.implode(',', $exists).']';
+           }
+           $this->success('操作成功'.$extra_msg,U('Index/index'),4);
+    }  
 
     public function getExcel(){
         set_time_limit(0);
@@ -195,6 +242,9 @@ class IndexController extends Controller {
         }
 
         public function getSkuIds(){
+            $uid = I('uid','1','intval');
+            $sku = M('Sku')->where(['uid'=>$uid])->getField('sku_id',true);  
+            return !empty($sku)?$sku:[];              
             //达能
             if(!isset($_GET['brand']) || $_GET['brand'] == 1){
                 $sku[] = 831721;

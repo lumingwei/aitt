@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- CSS goes in the document HEAD or added to your external stylesheet -->
+<style type="text/css">
+table.imagetable {
+  font-family: verdana,arial,sans-serif;
+  font-size:11px;
+  color:#333333;
+  border-width: 1px;
+  border-color: #999999;
+  border-collapse: collapse;
+}
+table.imagetable th {
+  background:#b5cfd2 url('cell-blue.jpg');
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #999999;
+}
+table.imagetable td {
+  background:#dcddc0 url('cell-grey.jpg');
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #999999;
+}
+button {  
+  width: 200px;  
+  padding:8px;  
+  background-color: #428bca;  
+  border-color: #357ebd;  
+  color: #fff;  
+  -moz-border-radius: 10px;  
+  -webkit-border-radius: 10px;  
+  border-radius: 10px; /* future proofing */  
+  -khtml-border-radius: 10px; /* for old Konqueror browsers */  
+  text-align: center;  
+  vertical-align: middle;  
+  border: 1px solid transparent;  
+  font-weight: 900;  
+  font-size:125%  
+} 
+.flower{
+    font-family: myFlower;
+    color:#0f0;
+} 
+.cat1{
+    font-family: myCatF;
+    color:#f00;
+}
+</style>
+<body>
+ <div align="center">
+
+   <p class="cat1"><font size="10">老婆你还是最棒的!</font></p>
+  <br/>
+ <button><a href="{:U('Index/index')}">返回列表</a></button>
+</div>
+    <br/>
+    <div class="content" >
+       <form  action="{:U('Index/add_sku_save')}" method="post" id="myform">
+           <table class="imagetable" align="center">
+               <tbody>
+               <tr>
+                   <th width="100">sku：</th>
+                   <td><input type="test" name="sku_ids" size="60">
+                       <span class="gray">请输入sku 英文逗号隔开可以批量输入</span></td>
+               </tr>
+               </tbody>
+
+           </table>
+                <br/>
+                <div align="center">
+               <button type="submit">提交</button>
+              </div>
+       </form>
+        </div>
+</body>
+</html>

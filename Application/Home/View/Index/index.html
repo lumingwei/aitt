@@ -1,0 +1,69 @@
+<!-- CSS goes in the document HEAD or added to your external stylesheet -->
+<style type="text/css">
+table.imagetable {
+  font-family: verdana,arial,sans-serif;
+  font-size:11px;
+  color:#333333;
+  border-width: 1px;
+  border-color: #999999;
+  border-collapse: collapse;
+}
+table.imagetable th {
+  background:#b5cfd2 url('cell-blue.jpg');
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #999999;
+}
+table.imagetable td {
+  background:#dcddc0 url('cell-grey.jpg');
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #999999;
+}
+button {  
+  width: 200px;  
+  padding:8px;  
+  background-color: #428bca;  
+  border-color: #357ebd;  
+  color: #fff;  
+  -moz-border-radius: 10px;  
+  -webkit-border-radius: 10px;  
+  border-radius: 10px; /* future proofing */  
+  -khtml-border-radius: 10px; /* for old Konqueror browsers */  
+  text-align: center;  
+  vertical-align: middle;  
+  border: 1px solid transparent;  
+  font-weight: 900;  
+  font-size:125%  
+} 
+.flower{
+    font-family: myFlower;
+    color:#0f0;
+} 
+.cat1{
+    font-family: myCatF;
+    color:#f00;
+}
+</style>
+<div align="center">
+
+   <p class="cat1"><font size="10">老婆你是最棒的!</font></p>
+  <br/>
+ <button><a href="{:U('Index/add_sku')}">新增sku</a></button>
+</div>
+<br/><br/>
+<!-- Table goes in the document BODY -->
+<table class="imagetable" align="center">
+<tr>
+  <th width="200" align="center">京东商品skuid</th>
+  <th width="100" align="center">操作</th>
+</tr>
+<foreach name="list" item="row">
+    <tr>
+      <td width="200" align="center">{$row.sku_id}</td>
+      <td width="100" align="center"><a href="{:U('Index/del_sku')}&sku_id={$row.sku_id}">删除</a></td>
+    </tr>
+</foreach>
+</table>
