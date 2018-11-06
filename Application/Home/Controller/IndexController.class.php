@@ -3,6 +3,70 @@
 namespace Home\Controller;
 use Think\Controller;
 class IndexController extends Controller {
+    public function getGoodsImg($id = 0){
+            $sp_url = "https://item.jd.hk/{$id}.html";
+            $common_url = "https://item.jd.com/{$id}.html";
+            $img = '';
+            $cont = file_get_contents($sp_url);
+            if(!empty($cont)){
+            preg_match_all('/<img data-img="1" width="450" height="450".*?src="(.*?)".*?>/is',$cont,$array);
+           if(!empty($array[1][0])){
+                $img = 'https:'.$array[1][0];
+           }
+            return $img;        
+    }
+}
+    public function getimg(){
+        $id    = I('id','','trim');
+        $title = I('title','','trim');
+        $price = I('price','','trim');
+        if(empty($id) || empty($title) || empty($price)){
+            exit('参数不完整！');
+        }
+        $goods_img = $this->getGoodsImg($id);
+        header("Content-type: image/png");
+        $font = realpath("./PingFangBold.ttf"); //写的文字用到的字体。
+        $font1 = realpath("./PingFangMedium.ttf"); //写的文字用到的字体。
+        $image_1 = @imagecreatefromjpeg($goods_img);  
+        $image_2 = @imagecreatefromjpeg(realpath("./di.jpg"));  
+        $max_X=imagesx($image_2);
+        $max_Y=imagesy($image_2);  
+        imagecopyresized($image_2,$image_1,$max_X/11.2,$max_Y/12,0,0,180,180,imagesx($image_1),imagesy($image_1));
+      
+
+        //从图片建立文件，此处以jpg文件格式为例
+        $black = imagecolorallocate($image_2, 0, 0, 0);
+        $red   = imagecolorallocate($image_2, 254,72,93);
+        $text  = $title; //要写到图上的文字
+        $text2 ='￥'.$price;
+        //$text3 ='不容错过';
+        $max_X = $max_X-10;
+        $max_Y = $max_Y-10;
+        $fontWidth1 = 16;//要把文字左右间距也有考虑进去
+        $fontWidth2 = 18;//要把文字左右间距也有考虑进去
+        //$fontWidth3 = 25;//要把文字左右间距也有考虑进去
+        $x1         = $this->getX($text,$fontWidth1,$max_X,$spacing=4);
+        $x2         = $this->getX($text2,$fontWidth2,$max_X*0.40,$spacing=5);
+        //$x3         = $this->getX($text3,$fontWidth3,$max_X,$spacing=6);
+        imagettftext($image_2, $fontWidth1, 0, $x1, $max_Y*0.8, $black, $font1, $text);
+        imagettftext($image_2, $fontWidth2, 0, $x2, $max_Y*0.955, $red, $font, $text2);
+        //imagettftext($image_2, $fontWidth3, 0, $x3, $max_Y/4+18+18+36+36+7, $black, $font, $text3);
+
+    
+        imagejpeg($image_2);
+        imagedestroy($image_2);        
+    }
+    private function getX($text, $fontSize, $max_X, $spacing)
+    {
+        $newStr    = preg_replace('/[^\x{4e00}-\x{9fa5}]/u', '', $text);
+        $jj1       = mb_strlen($newStr, "utf-8");
+        $jj1       = !empty($jj1) ? $jj1 : 0;
+        $jj2       = mb_strlen($text, 'utf-8') - $jj1;
+        $textWidth = $fontSize * mb_strlen($text, 'utf-8') + ($jj1 - $jj2) * $spacing;
+        $x1        = ceil(($max_X - $textWidth) / 2); //计算文字的水平位置
+        return $x1;
+    }   
+
     public function index(){
         set_time_limit(0);
     	//获取价格 
@@ -212,11 +276,6 @@ class IndexController extends Controller {
       //美赞臣
      $sku[] = 1431731;
      $sku[] = 1431727;
-
-
- 
- 
-
 
 
             return $sku;
