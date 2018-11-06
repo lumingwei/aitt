@@ -72,9 +72,13 @@ class IndexController extends Controller {
         $textWidth = $fontSize * mb_strlen($text, 'utf-8') + ($jj1 - $jj2) * $spacing;
         $x1        = ceil(($max_X - $textWidth) / 2); //计算文字的水平位置
         return $x1;
+    }
+
+    public function index(){
+        echo 'hellow';
     }   
 
-    public function index1(){
+    public function getExcel(){
         set_time_limit(0);
     	//获取价格 
     	//https://c0.3.cn/stock?skuId=7765111&cat=670,671,672&venderId=1000000157&area=1_72_2799_0&buyNum=1&choseSuitSkuIds=&extraParam={%22originid%22:%221%22}&ch=1&fqsp=0&pduid=1080223807&pdpin=&callback=jQuery1369985
