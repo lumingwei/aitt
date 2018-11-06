@@ -20,10 +20,17 @@ class IndexController extends Controller {
         $id    = I('id','','trim');
         $title = I('title','','trim');
         $price = I('price','','trim');
-        if(empty($id) || empty($title) || empty($price)){
+        if(empty($id) || empty($title)){
             exit('参数不完整！');
         }
         $goods_img = $this->getGoodsImg($id);
+        if(empty($price)){
+              $price     = $this->getPrice($id);
+        }
+        if(empty($goods_img) || empty($price)){
+            exit('信息获取失败');
+        }
+        $price = $price/100*100;        
         header("Content-type: image/png");
         $font = realpath("./PingFangBold.ttf"); //写的文字用到的字体。
         $font1 = realpath("./PingFangMedium.ttf"); //写的文字用到的字体。
@@ -67,7 +74,7 @@ class IndexController extends Controller {
         return $x1;
     }   
 
-    public function index(){
+    public function index1(){
         set_time_limit(0);
     	//获取价格 
     	//https://c0.3.cn/stock?skuId=7765111&cat=670,671,672&venderId=1000000157&area=1_72_2799_0&buyNum=1&choseSuitSkuIds=&extraParam={%22originid%22:%221%22}&ch=1&fqsp=0&pduid=1080223807&pdpin=&callback=jQuery1369985
