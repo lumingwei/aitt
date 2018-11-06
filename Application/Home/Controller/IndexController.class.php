@@ -199,6 +199,26 @@ class IndexController extends Controller {
             $sku[] = 5176336;
             $sku[] = 6256055;
    }
+
+     //美素佳儿
+     $sku[] = 6514054;
+     $sku[] = 6514056;
+     $sku[] = 6514034;
+     $sku[] = 8444261;
+     $sku[] = 8444259;
+     $sku[] = 8232352;
+
+
+      //美赞臣
+     $sku[] = 1431731;
+     $sku[] = 1431727;
+
+
+ 
+ 
+
+
+
             return $sku;
         }
 
