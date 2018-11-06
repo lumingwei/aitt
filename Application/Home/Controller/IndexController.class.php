@@ -61,7 +61,7 @@ class IndexController extends Controller {
         imagettftext($image_2, $fontWidth2, 0, $x2, $max_Y*0.965, $red, $font, $text2);
         imagettftext($image_2, $fontWidth3, 0, $x2+8, $max_Y*0.965, $red, $font, $text3);
 
-        imagejpeg($image_2);
+        imagepng($image_2);
         imagedestroy($image_2);        
     }
     private function getX($text, $fontSize, $max_X, $spacing)
