@@ -17,6 +17,7 @@ class IndexController extends Controller {
     }
 }
     public function getimg(){
+        //http://176.122.166.164/index.php?m=Home&c=Index&a=getimg&id=2210567&title=小十二最小十二最棒的&price=666
         $id    = I('id','','trim');
         $title = I('title','','trim');
         $price = I('price','','trim');
@@ -32,34 +33,34 @@ class IndexController extends Controller {
         }
         $price = $price/100*100;        
         header("Content-type: image/png");
-        $font = realpath("./PingFangBold.ttf"); //写的文字用到的字体。
-        $font1 = realpath("./PingFangMedium.ttf"); //写的文字用到的字体。
+        $font = realpath("./msyh.ttf"); //写的文字用到的字体。
+        $font1 = realpath("./msyh.ttf"); //写的文字用到的字体。
         $image_1 = @imagecreatefromjpeg($goods_img);  
         $image_2 = @imagecreatefromjpeg(realpath("./di.jpg"));  
         $max_X=imagesx($image_2);
         $max_Y=imagesy($image_2);  
-        imagecopyresized($image_2,$image_1,$max_X/11.2,$max_Y/12,0,0,180,180,imagesx($image_1),imagesy($image_1));
+        imagecopyresized($image_2,$image_1,$max_X/11.2,$max_Y/12,0,0,190,190,imagesx($image_1),imagesy($image_1));
       
 
         //从图片建立文件，此处以jpg文件格式为例
         $black = imagecolorallocate($image_2, 0, 0, 0);
         $red   = imagecolorallocate($image_2, 254,72,93);
         $text  = $title; //要写到图上的文字
-        $text2 ='￥'.$price;
-        //$text3 ='不容错过';
+        $text2 = $price;
+        $text2 = '　'.$price;
+        $text3 = '￥';
         $max_X = $max_X-10;
         $max_Y = $max_Y-10;
-        $fontWidth1 = 16;//要把文字左右间距也有考虑进去
-        $fontWidth2 = 18;//要把文字左右间距也有考虑进去
-        //$fontWidth3 = 25;//要把文字左右间距也有考虑进去
+        $fontWidth1 = 13;//要把文字左右间距也有考虑进去
+        $fontWidth2 = 20;//要把文字左右间距也有考虑进去
+        $fontWidth3 = 16;//要把文字左右间距也有考虑进去
         $x1         = $this->getX($text,$fontWidth1,$max_X,$spacing=4);
         $x2         = $this->getX($text2,$fontWidth2,$max_X*0.40,$spacing=5);
         //$x3         = $this->getX($text3,$fontWidth3,$max_X,$spacing=6);
-        imagettftext($image_2, $fontWidth1, 0, $x1, $max_Y*0.8, $black, $font1, $text);
-        imagettftext($image_2, $fontWidth2, 0, $x2, $max_Y*0.955, $red, $font, $text2);
-        //imagettftext($image_2, $fontWidth3, 0, $x3, $max_Y/4+18+18+36+36+7, $black, $font, $text3);
+        imagettftext($image_2, $fontWidth1, 0, $x1, $max_Y*0.81, $black, $font1, $text);
+        imagettftext($image_2, $fontWidth2, 0, $x2, $max_Y*0.965, $red, $font, $text2);
+        imagettftext($image_2, $fontWidth3, 0, $x2+8, $max_Y*0.965, $red, $font, $text3);
 
-    
         imagejpeg($image_2);
         imagedestroy($image_2);        
     }
