@@ -13,7 +13,8 @@ class IndexController extends Controller {
         		$list[] = [
         			'id'=>$sku,
         			'price'=>$this->getPrice($sku),
-        			'title'=>$this->getTitle($sku)
+                    'title'=>$this->getTitle($sku),
+        			'fullcut'=> $this->getFullCut($sku),
         		];
     
         	}
@@ -23,7 +24,8 @@ class IndexController extends Controller {
                 $xls_head = array(
                     '京东skuid',
                     'sku名称',
-                    '价格'
+                    '价格',
+                    '满减信息',
                 );
                 header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
                 header("Accept-Ranges: bytes");
@@ -39,8 +41,44 @@ class IndexController extends Controller {
                     $item[] = $row['id'].'`';
                     $item[] = $row['title'];
                     $item[] = $row['price'];
+                    $item[] = trim($row['fullcut']);
                     echo mb_convert_encoding(implode(",", $item) ."\r\n", 'GBK', 'UTF-8');
                 }
+    }
+
+    public function getFullCut($sku_id){                      
+        $fullcut_url = "https://cd.jd.com/promotion/v2?callback=jQuery5431379&skuId=".$sku_id."&area=1_72_4137_0&shopId=1000001582&venderId=1000001582&cat=1319%2C1523%2C7052&isCanUseDQ=isCanUseDQ-1&isCanUseJQ=isCanUseJQ-1&platform=0&orgType=2&jdPrice=760.00&appid=1&_=1541471660594";
+            $full_cut = '';
+            $cont = file_get_contents($fullcut_url);
+            if(!empty($cont)){
+                $tmp = explode('jQuery5431379(', $cont);
+                if(!empty($tmp[1])){
+                    $tmp1 = rtrim($tmp[1],')');
+                }
+                if(!empty($tmp1)){
+                    $tmp1 = iconv("GBK","UTF-8",$tmp1);
+                    $json = json_decode($tmp1);
+                    $counpons = $json->skuCoupon;
+                    $pros = $json->prom->pickOneTag;
+                     if(!empty($pros)){
+                        foreach ($pros as $v) {
+                            if($v->code == 15 && !empty($v->content)){
+                                 $cut_pros[] = $v->content;
+                            }
+                        }
+                    }                   
+                    if(!empty($counpons)){
+                        foreach ($counpons as $value) {
+                            if($value->couponType == 1 && !empty($value->trueDiscount) && !empty($value->quota)){
+                                 $cut_coupons[] = '满'.$value->quota.'减'.$value->trueDiscount."({$value->name}，{$value->timeDesc})";
+                            }
+                        }
+                    }
+                }                       
+            }
+            $full_cut .= !empty($cut_coupons)    ? "优惠券满减 【".implode('，', $cut_coupons)."】 |--| ": '';
+            $full_cut    .= !empty($cut_pros)    ? "促销满减 【".implode('，', $cut_pros)."】": '';
+            return $full_cut;
     }
 
     public function getPrice($sku_id){        		    	
