@@ -137,7 +137,7 @@ class IndexController extends Controller {
             if(empty($sku_ids)){
                 $this->error('参数异常',U('Index/easy'));
             }else{
-                  $sku_ids = explode('\n', $sku_ids);
+                  $sku_ids = explode("\n", $sku_ids);
             }
         }
         if(!empty($sku_ids) && is_array($sku_ids)){
