@@ -128,9 +128,28 @@ class IndexController extends Controller {
 
     public function getExcel(){
         set_time_limit(0);
+
     	//获取价格 
     	//https://c0.3.cn/stock?skuId=7765111&cat=670,671,672&venderId=1000000157&area=1_72_2799_0&buyNum=1&choseSuitSkuIds=&extraParam={%22originid%22:%221%22}&ch=1&fqsp=0&pduid=1080223807&pdpin=&callback=jQuery1369985
-    	$skuids = $this->getSkuIds();
+        $easy = I('easy',0,'intval');
+    	$sku_ids = I('sku_ids','','trim');
+        if(!empty($easy)){
+            if(empty($sku_ids)){
+                $this->error('参数异常',U('Index/easy'));
+            }else{
+                  $sku_ids = explode('\n', $sku_ids);
+            }
+        }
+        if(!empty($sku_ids) && is_array($sku_ids)){
+            foreach ($sku_ids as  $value) {
+                if(!empty($value)){
+                    $skuids[] = $value;
+                }
+            }
+        }
+        if(empty($easy)){
+            $skuids = $this->getSkuIds();
+        }
         if(!empty($skuids)){
         	foreach($skuids as $sku){
         		$list[] = [
