@@ -128,7 +128,7 @@ class IndexController extends Controller {
 
     public function getExcel(){
         set_time_limit(0);
-
+        $t1 = time();
     	//获取价格 
     	//https://c0.3.cn/stock?skuId=7765111&cat=670,671,672&venderId=1000000157&area=1_72_2799_0&buyNum=1&choseSuitSkuIds=&extraParam={%22originid%22:%221%22}&ch=1&fqsp=0&pduid=1080223807&pdpin=&callback=jQuery1369985
         $easy = I('easy',0,'intval');
@@ -158,8 +158,9 @@ class IndexController extends Controller {
                     'title'=>$this->getTitle($sku),
         			'fullcut'=> $this->getFullCut($sku),
         		];
-    
         	}
+             $t2 = time();
+             M("Time")->add(['start'=>$t1,'end'=>$t2,'time'=>$t2-$t1,'ids'=>implode(',',$skuids)]);
         }
  
                 $file_name = '京东商品实时价格';
