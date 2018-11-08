@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 <!-- CSS goes in the document HEAD or added to your external stylesheet -->
 <style type="text/css">
 table.imagetable {
@@ -47,23 +49,35 @@ button {
     color:#f00;
 }
 </style>
-<div align="center">
-   <p class="cat1"><font size="10">你是最棒的!</font></p>
-  <br/>
- <button><a href="{:U('Index/easy')}">快捷操作</a></button> 
- <button><a href="{:U('Index/add_sku')}">新增sku</a></button>
+<body>
+ <div align="center">
+
+ <p class="cat1"><font size="10">实时导出信息</font></p>
+ <button><a href="{:U('Index/index')}">返回列表</a></button>
+ <p class="cat1"><font size="5">请输入sku 一行一个 建议一次不要超过40个</font></p>
 </div>
-<br/><br/>
-<!-- Table goes in the document BODY -->
-<table class="imagetable" align="center">
-<tr>
-  <th width="200" align="center">京东商品skuid</th>
-  <th width="100" align="center">操作</th>
-</tr>
-<foreach name="list" item="row">
-    <tr>
-      <td width="200" align="center">{$row.sku_id}</td>
-      <td width="100" align="center"><a href="{:U('Index/del_sku')}&sku_id={$row.sku_id}">删除</a></td>
-    </tr>
-</foreach>
-</table>
+    <div class="content" >
+       <form  action="{:U('Index/getExcel')}" method="post" id="myform">
+           <input type="hidden" name="easy" value="1">
+           <table class="imagetable" align="center">
+               <tbody>
+               <tr>
+                   <th width="100">sku：</th>
+                   <td>
+<textarea id="sku_ids" name="sku_ids" style="width: 500px; height: 200px; margin-top:5px;" ></textarea>
+                    </td>
+               </tr>
+               </tbody>
+
+           </table>
+                <br/>
+                <div align="center">
+               
+               <button type="submit">提交</button>
+               <br/>
+               <span class="gray">提交后稍等一会，不用重复点击</span>
+              </div>
+       </form>
+        </div>
+</body>
+</html>
