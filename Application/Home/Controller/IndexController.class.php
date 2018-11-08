@@ -143,7 +143,7 @@ class IndexController extends Controller {
         if(!empty($sku_ids) && is_array($sku_ids)){
             foreach ($sku_ids as  $value) {
                 if(!empty($value)){
-                    $skuids[] = $value;
+                    $skuids[] = trim($value);
                 }
             }
         }
