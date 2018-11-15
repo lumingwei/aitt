@@ -201,6 +201,7 @@ class IndexController extends Controller {
                 ];
                 M("SkuPrice")->add($tmp);
             }
+            echo 'syn_price';
             return true;
         }
         $file_name = '京东商品实时价格';
