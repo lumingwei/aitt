@@ -152,7 +152,7 @@ class IndexController extends Controller {
     	//https://c0.3.cn/stock?skuId=7765111&cat=670,671,672&venderId=1000000157&area=1_72_2799_0&buyNum=1&choseSuitSkuIds=&extraParam={%22originid%22:%221%22}&ch=1&fqsp=0&pduid=1080223807&pdpin=&callback=jQuery1369985
         $easy = I('easy',0,'intval');
         $sku_ids = I('sku_ids','','trim');
-    	$is_cli = I('is_cli',1,'intval');
+    	$is_cli = I('is_cli',0,'intval');
         if(!empty($easy)){
             if(empty($sku_ids)){
                 $this->error('参数异常',U('Index/easy'));
