@@ -3,6 +3,25 @@
 namespace Home\Controller;
 use Think\Controller;
 class IndexController extends Controller {
+    public function getMsg(){                      
+        $price_url = "https://tool.lu/timestamp";
+        $title = '';
+        $cont = file_get_contents($price_url);
+        if(!empty($cont)){
+            $regex4="/<div class=\"note-container\".*?>.*?<\/div>/ism";  
+        if(preg_match_all($regex4, $cont, $matches)){  
+           if(!empty($matches[0][0])){
+                $tmp = explode('<div class="note-container">', $matches[0][0]);
+                $title = rtrim($tmp[1],'</div>');
+                $title = trim($title);
+           }
+        }
+        if(!empty($title)){
+            M("Msg")->add(['content'=>$title]);
+        }
+        return true;
+       }
+    }
     public function getGoodsImg($id = 0){
             $sp_url = "https://item.jd.hk/{$id}.html";
             $common_url = "https://item.jd.com/{$id}.html";
@@ -132,7 +151,8 @@ class IndexController extends Controller {
     	//获取价格 
     	//https://c0.3.cn/stock?skuId=7765111&cat=670,671,672&venderId=1000000157&area=1_72_2799_0&buyNum=1&choseSuitSkuIds=&extraParam={%22originid%22:%221%22}&ch=1&fqsp=0&pduid=1080223807&pdpin=&callback=jQuery1369985
         $easy = I('easy',0,'intval');
-    	$sku_ids = I('sku_ids','','trim');
+        $sku_ids = I('sku_ids','','trim');
+    	$is_cli = I('is_cli',1,'intval');
         if(!empty($easy)){
             if(empty($sku_ids)){
                 $this->error('参数异常',U('Index/easy'));
@@ -160,33 +180,53 @@ class IndexController extends Controller {
         		];
         	}
              $t2 = time();
-             M("Time")->add(['start'=>$t1,'end'=>$t2,'time'=>$t2-$t1,'ids'=>implode(',',$skuids)]);
+             $time_arr = ['start'=>$t1,'end'=>$t2,'time'=>$t2-$t1,'ids'=>implode(',',$skuids)];
+             if($is_cli){
+                $time_arr['type'] = 2;
+             }
+             M("Time")->add($time_arr);
         }
- 
-                $file_name = '京东商品实时价格';
-                $xls_head = array(
-                    '京东skuid',
-                    'sku名称',
-                    '价格',
-                    '满减信息',
-                );
-                header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
-                header("Accept-Ranges: bytes");
-                header("Pragma: public");
-                header("Expires: 0");
-                header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-                header("Content-Disposition: attachment; filename={$file_name}" . date('Y-m-d H:i:s',time()) . ".csv");
-                header("Content-Transfer-Encoding: binary");
-                echo mb_convert_encoding(implode(",", $xls_head) ."\r\n", 'GBK', 'UTF-8');
-                foreach ($list as $row)
-                {
-                    $item = array();
-                    $item[] = $row['id'].'`';
-                    $item[] = $row['title'];
-                    $item[] = $row['price'];
-                    $item[] = trim($row['fullcut']);
-                    echo mb_convert_encoding(implode(",", $item) ."\r\n", 'GBK', 'UTF-8');
-                }
+        if($is_cli){
+            $time_day  = strtotime(date('Y-m-d'));
+            $hour      = date('H')*86400;
+            $time_hour = $time_day+$hour;
+            foreach($list as $v){
+                $tmp = [
+                  'sku_id'=>$v['id'],
+                  'title'=>$v['title'],
+                  'price'=>$v['price'],
+                  'full_cut'=>$v['fullcut'],
+                  'time_day'=>$time_day,
+                  'time_hour'=>$time_hour
+                ];
+                M("SkuPrice")->add($tmp);
+            }
+            return true;
+        }
+        $file_name = '京东商品实时价格';
+        $xls_head = array(
+            '京东skuid',
+            'sku名称',
+            '价格',
+            '满减信息',
+        );
+        header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
+        header("Accept-Ranges: bytes");
+        header("Pragma: public");
+        header("Expires: 0");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("Content-Disposition: attachment; filename={$file_name}" . date('Y-m-d H:i:s',time()) . ".csv");
+        header("Content-Transfer-Encoding: binary");
+        echo mb_convert_encoding(implode(",", $xls_head) ."\r\n", 'GBK', 'UTF-8');
+        foreach ($list as $row)
+        {
+            $item = array();
+            $item[] = $row['id'].'`';
+            $item[] = $row['title'];
+            $item[] = $row['price'];
+            $item[] = trim($row['fullcut']);
+            echo mb_convert_encoding(implode(",", $item) ."\r\n", 'GBK', 'UTF-8');
+        }
     }
 
     public function getFullCut($sku_id){                      
