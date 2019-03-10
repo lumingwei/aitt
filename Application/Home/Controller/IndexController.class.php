@@ -3,6 +3,35 @@
 namespace Home\Controller;
 use Think\Controller;
 class IndexController extends Controller {
+        //抽奖
+     public function getreward(){
+          $cookieName = 'YZYC_Prize_1';
+          if(isset($_COOKIE['YZYC_Prize_1']) && 0){
+             $prize = '今天已经抽奖'." <br/> (".$_COOKIE['YZYC_Prize_1'].")";
+          }else{
+           $prize_arr = array( 
+              '1' => array('id'=>1,'prize'=>'免一杯','rate'=>1), 
+              '2' => array('id'=>2,'prize'=>'买一送一','rate'=>2), 
+              '3' => array('id'=>3,'prize'=>'半价','rate'=>3), 
+              '4' => array('id'=>4,'prize'=>'第二杯半价','rate'=>4), 
+              '5' => array('id'=>5,'prize'=>'8.8折','rate'=>10), 
+              '6' => array('id'=>6,'prize'=>'九折','rate'=>16),
+              '7' => array('id'=>7,'prize'=>'谢谢惠顾','rate'=>60),    
+           );
+          $return = array();
+          foreach ($prize_arr as $key => $val) {
+            $prize_cn[$val['id']] = $val['prize'];     
+            for($i=0;$i<$val['rate'];$i++){
+                $return[] = $val['id'];
+            }
+          } 
+         shuffle($return);
+         $prize = $prize_cn[$return[array_rand($return)]]; 
+         setCookie($cookieName,$prize,time()+12*3600);
+         }
+         $this->assign('prize',$prize);   
+         $this->display('reward');
+    }  
     public function getMsg(){                      
         $price_url = "https://tool.lu/timestamp";
         $title = '';
