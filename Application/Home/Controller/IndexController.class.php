@@ -9,7 +9,7 @@ class IndexController extends Controller {
           $cookieTime = 'YZYC_Prize_Time';
           if(isset($_COOKIE['YZYC_Prize_1']) && isset($_COOKIE['YZYC_Prize_Time'])){
              $prize = '今天已经抽奖'." <br/> (".$_COOKIE['YZYC_Prize_1'].")";
-             $time  = date('Y-m-d H:i:s',$_COOKIE['YZYC_Prize_Time']).'-'.date('Y-m-d H:i:s',$_COOKIE['YZYC_Prize_Time']+12*3600);
+             $time  = date('Y-m-d H:i:s',$_COOKIE['YZYC_Prize_Time']).' 至 '.date('Y-m-d H:i:s',$_COOKIE['YZYC_Prize_Time']+12*3600);
           }else{
            $prize_arr = array( 
               '1' => array('id'=>1,'prize'=>'免一杯','rate'=>1), 
@@ -32,9 +32,9 @@ class IndexController extends Controller {
          $now   = time();
          setCookie($cookieName,$prize,time()+12*3600);
          setCookie($cookieTime,$now,time()+12*3600);
-         $time  = date('Y-m-d H:i:s',$now).'-'.date('Y-m-d H:i:s',$now+12*3600); 
+         $time  = date('Y-m-d H:i:s',$now).' 至 '.date('Y-m-d H:i:s',$now+12*3600); 
          }
-         $this->assign('prize',$prize." <br/> ".$time);
+         $this->assign('prize',$prize);
          $this->assign('prize_time',$time);      
          $this->display('reward');
     }  
