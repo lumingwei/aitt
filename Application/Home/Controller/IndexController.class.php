@@ -34,7 +34,7 @@ class IndexController extends Controller {
          setCookie($cookieTime,$now,time()+12*3600);
          $time  = date('Y-m-d H:i:s',$now).'-'.date('Y-m-d H:i:s',$now+12*3600); 
          }
-         $this->assign('prize',$prize);
+         $this->assign('prize',$prize." <br/> ".$time);
          $this->assign('prize_time',$time);      
          $this->display('reward');
     }  
