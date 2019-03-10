@@ -5,6 +5,7 @@ use Think\Controller;
 class IndexController extends Controller {
         //抽奖
      public function getreward(){
+          date_default_timezone_set('Asia/Shanghai');
           $cookieName = 'YZYC_Prize_1';
           $cookieTime = 'YZYC_Prize_Time';
           if(isset($_COOKIE['YZYC_Prize_1']) && isset($_COOKIE['YZYC_Prize_Time'])){
