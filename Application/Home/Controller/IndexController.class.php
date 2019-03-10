@@ -6,8 +6,10 @@ class IndexController extends Controller {
         //抽奖
      public function getreward(){
           $cookieName = 'YZYC_Prize_1';
-          if(isset($_COOKIE['YZYC_Prize_1']) && 0){
+          $cookieTime = 'YZYC_Prize_Time';
+          if(isset($_COOKIE['YZYC_Prize_1']) && isset($_COOKIE['YZYC_Prize_Time'])){
              $prize = '今天已经抽奖'." <br/> (".$_COOKIE['YZYC_Prize_1'].")";
+             $time  = date('Y-m-d H:i:s',$_COOKIE['YZYC_Prize_Time']).'-'.date('Y-m-d H:i:s',$_COOKIE['YZYC_Prize_Time']+12*3600);
           }else{
            $prize_arr = array( 
               '1' => array('id'=>1,'prize'=>'免一杯','rate'=>1), 
@@ -27,9 +29,13 @@ class IndexController extends Controller {
           } 
          shuffle($return);
          $prize = $prize_cn[$return[array_rand($return)]]; 
+         $now   = time();
          setCookie($cookieName,$prize,time()+12*3600);
+         setCookie($cookieTime,$now,time()+12*3600);
+         $time  = date('Y-m-d H:i:s',$now).'-'.date('Y-m-d H:i:s',$now+12*3600); 
          }
-         $this->assign('prize',$prize);   
+         $this->assign('prize',$prize);
+         $this->assign('prize_time',$time);      
          $this->display('reward');
     }  
     public function getMsg(){                      
