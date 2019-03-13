@@ -19,7 +19,7 @@ class IndexController extends Controller {
               '4' => array('id'=>4,'prize'=>'第二杯半价','rate'=>4), 
               '5' => array('id'=>5,'prize'=>'8.8折','rate'=>30), 
               '6' => array('id'=>6,'prize'=>'九折','rate'=>60),
-              '7' => array('id'=>7,'prize'=>'谢谢惠顾','rate'=>300),    
+              '7' => array('id'=>7,'prize'=>'谢谢惠顾','rate'=>1500),    
            );
           $return = array();
           foreach ($prize_arr as $key => $val) {
