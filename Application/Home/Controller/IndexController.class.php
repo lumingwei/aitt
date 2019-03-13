@@ -8,7 +8,7 @@ class IndexController extends Controller {
           date_default_timezone_set('Asia/Shanghai');
           $cookieName = 'YZYC_Prize_1';
           $cookieTime = 'YZYC_Prize_Time';
-          if(isset($_COOKIE['YZYC_Prize_1']) && isset($_COOKIE['YZYC_Prize_Time']) && 0){
+          if(isset($_COOKIE['YZYC_Prize_1']) && isset($_COOKIE['YZYC_Prize_Time'])){
              $prize = '今天已经抽奖'." <br/> (".$_COOKIE['YZYC_Prize_1'].")";
              $time  = date('Y-m-d H:i:s',$_COOKIE['YZYC_Prize_Time']).' 至 '.date('Y-m-d H:i:s',$_COOKIE['YZYC_Prize_Time']+12*3600);
           }else{
