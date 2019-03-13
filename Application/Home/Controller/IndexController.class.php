@@ -4,7 +4,7 @@ namespace Home\Controller;
 use Think\Controller;
 class IndexController extends Controller {
         //抽奖
-     public function getreward(){
+     public function getreward1(){
           date_default_timezone_set('Asia/Shanghai');
           $cookieName = 'YZYC_Prize_1';
           $cookieTime = 'YZYC_Prize_Time';
