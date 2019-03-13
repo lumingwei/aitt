@@ -4,11 +4,11 @@ namespace Home\Controller;
 use Think\Controller;
 class IndexController extends Controller {
         //抽奖
-     public function getreward1(){
+     public function getreward(){
           date_default_timezone_set('Asia/Shanghai');
           $cookieName = 'YZYC_Prize_1';
           $cookieTime = 'YZYC_Prize_Time';
-          if(isset($_COOKIE['YZYC_Prize_1']) && isset($_COOKIE['YZYC_Prize_Time'])){
+          if(isset($_COOKIE['YZYC_Prize_1']) && isset($_COOKIE['YZYC_Prize_Time']) && 0){
              $prize = '今天已经抽奖'." <br/> (".$_COOKIE['YZYC_Prize_1'].")";
              $time  = date('Y-m-d H:i:s',$_COOKIE['YZYC_Prize_Time']).' 至 '.date('Y-m-d H:i:s',$_COOKIE['YZYC_Prize_Time']+12*3600);
           }else{
@@ -17,9 +17,9 @@ class IndexController extends Controller {
               '2' => array('id'=>2,'prize'=>'买一送一','rate'=>2), 
               '3' => array('id'=>3,'prize'=>'半价','rate'=>3), 
               '4' => array('id'=>4,'prize'=>'第二杯半价','rate'=>4), 
-              '5' => array('id'=>5,'prize'=>'8.8折','rate'=>10), 
-              '6' => array('id'=>6,'prize'=>'九折','rate'=>16),
-              '7' => array('id'=>7,'prize'=>'谢谢惠顾','rate'=>60),    
+              '5' => array('id'=>5,'prize'=>'8.8折','rate'=>30), 
+              '6' => array('id'=>6,'prize'=>'九折','rate'=>60),
+              '7' => array('id'=>7,'prize'=>'谢谢惠顾','rate'=>300),    
            );
           $return = array();
           foreach ($prize_arr as $key => $val) {
@@ -28,7 +28,7 @@ class IndexController extends Controller {
                 $return[] = $val['id'];
             }
           } 
-         shuffle($return);
+         //shuffle($return);
          $prize = $prize_cn[$return[array_rand($return)]]; 
          $now   = time();
          setCookie($cookieName,$prize,time()+12*3600);
